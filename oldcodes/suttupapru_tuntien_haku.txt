@@ -1,0 +1,42 @@
+ <div class="search-container">
+            <h2 class="centered-title">Hae Tunteja</h2>
+            <div class="yellow-lines">
+                <div class="yellow-line1"></div>
+                <div class="yellow-line2"></div>
+            </div>
+            <div class="dropdown">
+                <label>Kaupunki</label>
+                <select>
+                    <option value="helsinki">Helsinki</option>
+                    <option value="espoo">Espoo</option>
+                </select>
+            </div>
+            <div class="dropdown">
+                <label>Kuntosali</label>
+                <select>
+                    <option value="sal1">Sal1</option>
+                    <option value="sal2">Sal2</option>
+                </select>
+            </div>
+            <h2 class="centered-title filters-title">Suodattimet</h2>
+            <div class="dropdown">
+                <label>Kategoriat</label>
+                <select>
+                    <option value="category1">Category1</option>
+                    <option value="category2">Category2</option>
+                </select>
+            </div>
+            <div class="dropdown">
+                <label>Tunnit</label>
+                <select>
+                    <option value="hour1">1 hour</option>
+                    <option value="hour2">2 hours</option>
+                </select>
+            </div>
+            <div class="time-filter">
+                <label>Alku aika</label>
+                <input type="time">
+                <label>Loppu-aika</label>
+                <input type="time">
+            </div>
+        </div>

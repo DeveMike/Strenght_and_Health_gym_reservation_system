@@ -1,0 +1,617 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+/* Welcome Sectionin tyyli */
+.welcome-section {
+    height: 640px;
+    border-bottom: 1px solid #ff0606;
+    background-image: url('assets/header.jpg');
+    background-size: cover;
+    background-position: 50% 50%;
+    position: relative;
+}
+
+.welcome-image {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(5, 5, 5, 0.339);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.welcome-content {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.welcome-content h1 {
+    font-family: "Nunito-Regular", sans-serif;
+    font-weight: 400;
+    color: #ffffff;
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.price-text {
+    font-family: "Montserrat-ExtraBold", sans-serif;
+    font-weight: 800;
+    color: #ff0606;
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.welcome-join-button{
+    background-color: #07a04a;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: "Montserrat-Medium", sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.welcome-join-button:hover{
+    background-color: #066e33;
+}
+
+/* Tyyli why_us_sectionille */
+.why-us-section {
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-bottom: #07a04a solid 20px;
+    background-color: #0a0a0a
+}
+
+/* Tyyli otsikolle */
+.why-us-section h1 {
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 50px;
+}
+
+/* Tyyli why-us-boxeille */
+.why-us-boxes {
+    display: flex;
+    padding: 0 64px;
+}
+
+/* Tyyli yksittäiselle why-us-boxille */
+.why-us-box {
+    width: calc(90% / 3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 25px;
+    background-color: #0a0a0a;
+    padding: 20px;
+    
+}
+
+.why-us-box p{
+    color: white;
+    margin-top: 10px;
+    font-size: 17px;
+}
+
+
+/* Tyyli ikoneille */
+.why-us-box img {
+    width: 48px;
+    height: 48px;
+}
+
+/* Tyyli tekstikuvaukselle */
+.why-us-box h2 {
+    margin-top: 10px;
+    color: #07a04a;
+    font-size: 17px;
+}
+
+/*memeber container styles*/
+.mbr-container h1, h2{
+    padding: 5px;
+    color: white;
+}
+.mbr-container {
+    height: 23rem;
+    background: linear-gradient(to bottom, #202A46, #2C3C57, #334762);
+    text-align: center;
+    padding: 25px;
+}
+
+.membership-options {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.membership-option {
+    width: calc(33.33% - 90px);
+    padding: 20px;
+    background-color: bisque;
+    border-radius: 10px;
+    text-align: center;
+    margin: 0 15px;
+    box-shadow: 0 30px 20px -5px rgba(0, 0, 0, 0.6);
+}
+
+.membership-option:nth-child(2) {
+    transform: scale(1.05);
+}
+
+
+/* .membership-option:first-child {
+    margin-left: 200px;
+}
+
+.membership-option:last-child {
+    margin-right: 200px;
+} */
+
+.membership-option h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+
+.price {
+    color: #ff0606;
+    font-size: 28px;
+    font-family: "Nunito-Bold", Helvetica;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.mber-join-button {
+    background-color: #07a04a;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 40px;
+    cursor: pointer;
+    font-family: "Montserrat-Medium", Helvetica;
+    font-weight: 500;
+    font-size: 17px;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.note {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #07a04a;
+}
+
+
+/* Info1 tyylit */
+
+.info-section {
+    height: 105vh;
+    padding: 70px;
+    display: flex;
+    align-items: center;
+/*     background: linear-gradient(to top, #202A46, #2C3C57, #334762);
+ */    background: linear-gradient(to bottom right, rgba(0, 0, 0, 0.90), #0a0a0a);
+    border-top: #DF2835 solid 20px;
+    border-bottom: #DF2835 solid 10px;
+}
+
+.info-image img {
+  border-radius: 20px;
+}
+
+.info-text {
+    margin-left: 82px;
+    
+}
+
+.info-text h2 {
+    font-size: 36px;
+    margin-bottom: 25px;
+    color: white;
+    text-align: center;
+}
+
+.info-text .yellow-text {
+    color: yellow;
+    font-size: 30px;
+    margin-bottom: 36px;
+    text-align: center;
+}
+
+.info-text p {
+    color: whitesmoke;
+    font-size: 24px;
+    line-height: 36px;
+    text-align: center;
+}
+
+/* info-section2 stylee */
+
+.info-section2 {
+    height: 900px;
+    background: linear-gradient(to bottom, #202A46, #2C3C57, #334762);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    color: #fff;
+    text-align: center;
+    border-bottom: #DF2835 solid 10px;
+}
+
+.info-section2 h2 {
+    margin-top: 65px;
+    font-size: 36px;
+}
+
+.yellow-line1 {
+    width: 217px;
+    height: 4px;
+    background-color: yellow;
+    margin-top: 20px;
+}
+
+.yellow-line2{
+    width: 113px;
+    height: 4px;
+    background-color: yellow;
+    margin-top: 20px;
+}
+
+.info-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 1150px;
+    padding: 0 65px;
+    margin-top: 3rem;
+    margin-left: 10rem;
+}
+
+.info-block .icon-title-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.info-block img {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+
+.info-block h3 {
+    color: yellow;
+    font-size: 24px;
+    white-space: nowrap;
+}
+
+.text-wrapper {
+    max-width: 874px; /* tai 100% jos haluat sen olevan responsiivinen */
+    margin: 0 auto;
+}
+
+
+
+.text-wrapper p {
+    text-align: left; /* vaihda justify pois ja kokeile vasemmalle tasattua */
+    margin: 0;
+    padding: 0;
+    font-size: 1.2em;
+    max-width: 100%;
+     line-height: 3vh;
+
+    
+}
+
+
+.yellow-text2 p {
+    margin-top: 90px;
+    padding: 0 90px;
+    font-size: 20px;
+    color:yellow ;
+}
+
+
+    /* Keskisuuret näytöt (Tablets) */
+@media (min-width: 601px) and (max-width: 1024px) {
+   
+    
+    .welcome-section {
+        height: 520px;
+      }
+      .welcome-content h1 {
+        font-size: 38px;
+        margin-bottom: 25px;
+      }
+      .price-text {
+        font-size: 30px;
+        margin-bottom: 25px;
+      }
+      .welcome-join-button {
+        padding: 8px 15px;
+        font-size: 15px;
+      }
+
+      .why-us-section {
+        height: auto;
+        padding: 20px 0;
+      }
+      .why-us-section h1 {
+        font-size: 22px;
+        margin-bottom: 30px;
+      }
+      .why-us-boxes {
+        flex-direction: column;
+        padding: 0 30px;
+      }
+      .why-us-box {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 15px;
+        padding: 15px;
+      }
+      .why-us-box p {
+        font-size: 15px;
+        width: 30vh;
+      }
+      .why-us-box img {
+        width: 42px;
+        height: 42px;
+      }
+      .why-us-box h2 {
+        font-size: 15px;
+      }
+
+      .mbr-container {
+        height: auto;
+        padding: 15px;
+    }
+
+    .membership-options {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .membership-option {
+        width: 65%;
+        margin-bottom: 50px;
+        padding: 15px;
+    }
+
+    .membership-option:nth-child(2) {
+        transform: none;
+    }
+
+    .membership-option h3 {
+        font-size: 22px;
+    }
+
+    .price {
+        font-size: 26px;
+    }
+
+    .mber-join-button {
+        padding: 8px 30px;
+        font-size: 16px;
+    }
+
+    .info-section {
+        padding: 40px;
+        flex-direction: column;
+    }
+
+    .info-text {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .info-section2 {
+        height: auto;
+        padding: 30px 20px;
+    }
+
+    .info-block {
+        width: 85%;
+        padding: 0;
+        margin-top: 2rem;
+        margin-left:0;
+    }
+    
+  }
+  
+  /* Pienet näytöt (Mobiilit) */
+  @media (max-width: 600px) {
+   
+    .welcome-section {
+        height: 420px;
+      }
+      .welcome-content{
+          width:95vw;
+      }
+      .welcome-content h1 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+      }
+      .price-text {
+        font-size: 1.7rem;
+        margin-bottom: 20px;
+      }
+      
+
+      .why-us-section {
+        height: auto;
+        padding: 15px 0;
+      }
+      .why-us-section h1 {
+        font-size: 20px;
+        margin: 25px 0;
+      }
+      .why-us-boxes {
+        flex-direction: column;
+        padding: 0 15px;
+      }
+      .why-us-box {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+        padding: 10px;
+      }
+      .why-us-box p {
+        font-size: 15px;
+        width: 30vh;
+      }
+      .why-us-box img {
+        width: 36px;
+        height: 36px;
+      }
+      .why-us-box h2 {
+        font-size: 13px;
+      }
+
+      .mbr-container {
+        height: auto;
+        padding: 10px;
+    }
+    
+    .mbr-container h1,h2{
+        padding:15px 0;
+    }
+    
+
+    .membership-options {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .membership-option {
+        width: 95%;
+        margin-bottom: 50px;
+        padding: 10px;
+    }
+
+    .membership-option:nth-child(2) {
+        transform: none;
+    }
+
+    .membership-option h3 {
+        font-size: 20px;
+    }
+
+    .price {
+        font-size: 24px;
+    }
+
+    .info-section {
+        padding: 30px 20px;
+        flex-direction: column;
+    }
+
+    .info-text {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .info-section2 {
+        height: auto;
+        padding: 20px 10px;
+    }
+
+    .info-image img {
+        border-radius: 20px;
+        width: 20rem;
+        height: 28rem;
+    }
+    
+    .info-text h2 {
+    font-size: 20px;
+    margin:0;
+    
+    }
+    
+    .info-text .yellow-text {
+    font-size: 15px;
+}
+
+.info-text p {
+    font-size: 15px;
+    
+}
+
+    .info-block {
+        width: 95%;
+        padding: 0;
+        margin-top: 1.5rem;
+        margin-left: 0;
+    }
+
+    
+    .yellow-line1{
+        margin-top:0;
+        width: 250px;
+
+    }
+    
+    .info-block .icon-title-wrapper {
+    margin-top: 51px;
+}
+
+.info-block p{
+    font-size:14px;
+    padding:0;
+    line-height:normal;
+    
+}
+
+.text-wrapper {
+    margin-top: 0.5rem;
+    width:98%;
+}
+
+.text-wrapper p{
+    margin:0;
+    line-height: 2.1vh;
+
+}
+
+   .yellow-text2 p{
+    margin: 4rem 0 2rem;
+    font-size: 16px;
+    padding: 0 10px;
+        line-height: 2.5vh;
+
+
+    
+  }
+  
+}
+  

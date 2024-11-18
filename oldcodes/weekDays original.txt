@@ -1,0 +1,60 @@
+<?php
+// Tietokantayhteyden muodostaminen
+require 'includes/dbconnect.php';
+
+// Aseta aikavyöhyke
+date_default_timezone_set('Europe/Helsinki');
+
+// Tuntien päivityslogiikan suorittaminen
+updateWeeklySchedule($conn);
+
+function updateWeeklySchedule($conn) {
+    $today = new DateTime();
+    $weekNumber = $today->format("W");
+
+    $query = "SELECT COUNT(*) FROM Jumpat WHERE WEEK(start_time) = :weekNumber";
+    $stmt = $conn->prepare($query);
+    $stmt->execute(['weekNumber' => $weekNumber]);
+
+    if ($stmt->fetchColumn() == 0) {
+        $nextWeekMonday = new DateTime('next monday');
+        $nextSunday = new DateTime('next monday +6 days');
+
+        $nextWeekMondayFormatted = $nextWeekMonday->format('Y-m-d');
+        $nextSundayFormatted = $nextSunday->format('Y-m-d');
+
+        try {
+            $query = "UPDATE Jumpat SET start_time = CONCAT(DATE_ADD(DATE(start_time), INTERVAL WEEK('$nextWeekMondayFormatted') - WEEK(start_time) WEEK), ' ', TIME(start_time)), end_time = CONCAT(DATE_ADD(DATE(end_time), INTERVAL WEEK('$nextWeekMondayFormatted') - WEEK(end_time) WEEK), ' ', TIME(end_time)) WHERE DATE(start_time) BETWEEN '$nextWeekMondayFormatted' AND '$nextSundayFormatted'";
+            $stmt = $conn->prepare($query);
+            $stmt->execute();
+
+            echo "Tuntien ajat päivitetty onnistuneesti seuraavalle viikolle.\n";
+        } catch (PDOException $e) {
+            exit("Tietokantavirhe: " . $e->getMessage());
+        }
+    } else {
+        echo "Tunnit on jo päivitetty tälle viikolle.\n";
+    }
+}
+
+// Luodaan viikonpäivät
+echo generateWeekdays();
+
+function generateWeekdays() {
+    $weekdaysHtml = '<div class="weekdays">';
+    $currentDay = (new DateTime())->format('N');
+    $finnishWeekdays = ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'];
+
+    for ($i = 1; $i <= 7; $i++) {
+        $date = new DateTime();
+        $date->setISODate((int)$date->format('o'), (int)$date->format('W'), $i);
+        $dayLetter = $finnishWeekdays[$i - 1];
+        $dayNumber = $date->format('j');
+        $fullDate = $date->format('Y-m-d');
+        $activeClass = $i == $currentDay ? ' active' : '';
+        $weekdaysHtml .= "<div class=\"day$activeClass\" data-day=\"$fullDate\">$dayLetter<br>$dayNumber</div>";
+    }
+    $weekdaysHtml .= '</div>';
+    return $weekdaysHtml;
+}
+?>

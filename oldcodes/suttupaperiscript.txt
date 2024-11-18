@@ -1,0 +1,111 @@
+console.log("JS-tiedosto ladattu!");
+
+document.querySelectorAll('.book-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const classCard = btn.closest('.class-card');
+        let message;
+
+        const classId = classCard.dataset.classId;
+        console.log("Nappia painettu, classId on:", classId);
+
+
+        if (btn.textContent === 'Varaa') {
+            fetch('reserve.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'class_id=' + classId
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    btn.textContent = 'Peruuta';
+                    btn.classList.add('booked');
+
+                    // Päivitä kapasiteetti reaaliaikaisesti
+                    const currentBookingsElement = classCard.querySelector('.name');
+                    const currentCount = parseInt(currentBookingsElement.textContent.split('/')[0].split(' ').pop());
+                    currentBookingsElement.textContent = currentBookingsElement.textContent.replace(currentCount, currentCount + 1);
+                    
+                    message = document.createElement('div');
+                    message.className = 'book-msg green';
+                    message.textContent = 'Varaus on tehty onnistuneesti! Hyvää Treeniä!';
+                    classCard.appendChild(message);
+                    message.style.display = 'block';
+
+                    setTimeout(() => {
+                        classCard.removeChild(message);
+                    }, 3000);
+
+                } else {
+                    alert(data.message || "Varauksen tekeminen epäonnistui. Yritä uudelleen.");
+                }
+            });
+
+
+            //Peruuta napin toiminnot
+        } else if (btn.textContent === 'Peruuta') {
+            fetch('cancel.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'class_id=' + classId
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    btn.textContent = 'Varaa';
+                    btn.classList.remove('booked');
+
+                    // Päivitä kapasiteetti reaaliaikaisesti
+                    const currentBookingsElement = classCard.querySelector('.name');
+                    const currentCount = parseInt(currentBookingsElement.textContent.split('/')[0].split(' ').pop());
+                    currentBookingsElement.textContent = currentBookingsElement.textContent.replace(currentCount, currentCount - 1);
+
+                    message = document.createElement('div');
+                    message.className = 'book-msg red';
+                    message.textContent = 'Varaus on peruttu onnistuneesti!';
+                    classCard.appendChild(message);
+                    message.style.display = 'block';
+
+                    setTimeout(() => {
+                        classCard.removeChild(message);
+                    }, 3000);
+
+                } else {
+                    alert(data.message || "Varauksen peruuttaminen epäonnistui. Yritä uudelleen.");
+                }
+            });
+        }
+    });
+});
+
+document.querySelectorAll('.day').forEach(day => {
+    day.addEventListener('click', function() {
+        // Poistetaan 'active' luokka kaikilta päiviltä
+        document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
+        // Lisätään 'active' luokka painetulle päivälle
+        day.classList.add('active');
+    });
+});
+
+// Info nappi ilmestyy tuntikortin yläpuolelle.
+document.querySelectorAll('.info-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const classCard = btn.closest('.class-card');
+        const infoSection = classCard.querySelector('.info-section');
+        if(infoSection.style.display === 'none' || infoSection.style.display === '') {
+            infoSection.style.display = 'block';
+        } else {
+            infoSection.style.display = 'none';
+        }
+    });
+});
+
+
+
+
+
+

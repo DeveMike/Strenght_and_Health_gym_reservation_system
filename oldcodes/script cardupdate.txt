@@ -1,0 +1,795 @@
+document.querySelectorAll('.day').forEach(function(dayElement) {
+    dayElement.addEventListener('click', function() {
+        document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
+        this.classList.add('active');
+
+        const selectedDate = this.getAttribute('data-day');
+
+        fetch('fetch_data.php?day=' + selectedDate)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Saatu data:", data); // Tulostetaan koko vastaus konsoliin
+                if (Array.isArray(data) && data.length > 0) {
+                    updateUI(data); // Oletetaan, että vastaus on suoraan lista luokista
+                } else {
+                    console.error("Data ei sisällä luokkia:", data);
+                    const resultsDiv = document.querySelector('.classes-list');
+                    resultsDiv.innerHTML = '<p style="color: white;">Tietoja ei ole saatavilla valitulle päivämäärälle.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Virhe haettaessa tietoja:', error);
+                const resultsDiv = document.querySelector('.classes-list');
+                resultsDiv.innerHTML = '<p>Virhe: ' + error.message + '</p>';
+            });
+    });
+});
+
+//Dynaaminen osio
+
+// Search-content dropdown elementit näyttävät class-cards valinnan mukaan
+//Valinnat seuraavat ensisijaisesti kaupunki elementtiä jolloin siihen reforoivat tiedot näkyy alasvetolaatikoissa
+
+// Funktio hakee tiedot palvelimelta valitsimien arvojen perusteella
+async function fetchData() {
+    console.log("fetchData kutsuttu");
+    // Haetaan valitsimien arvot
+    const city = document.querySelector('#citySelect').value || null;
+    const gym = document.querySelector('#gymSelect').value || null;
+    const className = document.querySelector('#classNameSelect').value || null;
+    const instructor = document.querySelector('#instructorSelect').value || null;
+    const startTime = document.querySelector('#startTime').value || null;
+    const endTime = document.querySelector('#endTime').value || null;
+    // Lähetettävät tiedot konsoliin
+    console.log("Lähetettävät tiedot:", { city, address: gym, instructor, name: className, startTime, endTime });
+
+    try {
+        // Lähetetään tiedot palvelimelle
+        console.log("Lähetetään tiedot palvelimelle");
+        const response = await fetch('fetch_data.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ city, address: gym, instructor, name: className, startTime, endTime })
+        });
+
+        // Jos vastaus ei ole ok, heitetään virhe
+        if (!response.ok) {
+            throw new Error(`Network response was not ok. Status: ${response.status}, Text: ${await response.text()}`);
+        }
+
+        // Muutetaan vastaus JSON-muotoon
+        console.log("Muutetaan vastaus JSON-muotoon");
+        const data = await response.json();
+        console.log("Palvelimelta saadut tiedot:", data);
+
+        // Jos vastauksessa on osoitteita, luokkien nimiä ja ohjaajia, päivitetään valitsimet
+        if (data.addresses && data.classNames && data.instructors) {
+            console.log("Päivitetään valitsimet ja UI");
+            updateDropdowns(data);
+            updateUI(data.classes);
+        } else {
+            console.error("Odottamaton palvelimen vastaus");
+        }
+    } catch (error) {
+        // Jos tapahtuu virhe, näytetään virheviesti
+        console.error("Virhe:", error);
+        const resultsDiv = document.querySelector('.classes-list');
+        resultsDiv.innerHTML = '<p>Virhe: ' + error.message + '</p>';
+    }
+}
+
+// Funktio päivittää valitsimet palvelimelta saaduilla tiedoilla
+function updateDropdowns(data) {
+    console.log("Päivitetään valitsimet seuraavilla tiedoilla:", data);
+    updateDropdown('#gymSelect', data.addresses.map(address => ({ value: address, label: address })));
+    updateDropdown('#classNameSelect', data.classNames.map(name => ({ value: name, label: name })));
+    updateDropdown('#instructorSelect', Object.entries(data.instructors).map(([id, name]) => ({ value: id, label: name })));
+}
+
+// Funktio päivittää yksittäisen valitsimen
+function updateDropdown(selector, items, placeholder = "Valitse...") {
+    console.log(`Päivitetään valitsin ${selector} seuraavilla kohteilla:`, items);
+    const dropdown = document.querySelector(selector);
+    if (!dropdown) {
+        console.error(`Valitsinta ${selector} ei löydy.`);
+        return;
+    }
+    const currentValue = dropdown.value; // Tallennetaan nykyinen arvo
+    console.log(`Nykyinen arvo valitsimessa ${selector}:`, currentValue);
+    dropdown.innerHTML = `<option value="">${placeholder}</option>`; // Tyhjennetään valitsin ja lisätään "Valitse..." -vaihtoehto
+    items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.value;
+        option.textContent = item.label;
+        dropdown.appendChild(option);
+    });
+    dropdown.value = currentValue; // Asetetaan tallennettu arvo takaisin
+    console.log(`Valitsin ${selector} päivitetty.`);
+}
+
+// Funktio päivittää UI:n jumppatunneilla
+function updateUI(classes) {
+    const resultsDiv = document.querySelector('.classes-list');
+    resultsDiv.innerHTML = '';
+
+    if (!classes || classes.length === 0) {
+        console.log("Ei luokkia näytettäväksi.");
+        resultsDiv.innerHTML = '<p style="color: white;">Ei tuloksia</p>';
+        return;
+    }
+    console.log("Luokkadata:", classes); // Korjattu 'data.classes' -> 'classes'
+
+    classes.forEach(jumppa => {
+        const classElement = createClassElement(jumppa);
+        resultsDiv.appendChild(classElement);
+    });
+}
+
+function createClassElement(jumppa) {
+    const div = document.createElement('div');
+    div.classList.add('class-card');
+    div.setAttribute('data-class-id', jumppa.class_id);
+
+    const finnishMonths = ["", "Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu"];
+    const startDate = new Date(jumppa.start_time);
+    const endDate = new Date(jumppa.end_time);
+    const formattedStartDate = `${startDate.getDate()} ${finnishMonths[startDate.getMonth() + 1]} | ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')} - ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;
+    const instructorName = jumppa.instructor ? jumppa.instructor : "Ei ohjaajaa"; // Oletetaan, että jumppa-objektilla on ohjaajan nimi tai se on null
+    const reservationCount = Number(jumppa.reservation_count) || 0;
+    const userHasReservation = jumppa.user_has_reservation > 0;
+    const buttonText = userHasReservation ? "Peruuta" : "Varaa";
+    const buttonClass = userHasReservation ? "booked" : "";
+
+    div.innerHTML = `
+        <div class="class-info">
+            <div class="date-time">${formattedStartDate}</div>
+            <div class="name">${jumppa.name} ${reservationCount}/${jumppa.capacity}</div>
+            <div class="location">Kuntosali: ${jumppa.address}</div>
+            <div class="instructor">${instructorName}</div>
+        </div>
+        <div class="class-actions">
+            <button class="info-btn">Info</button>
+            <div class="info-section" style="display: none;">${jumppa.description}</div>
+            <button class="book-btn ${buttonClass}">${buttonText}</button>
+        </div>
+    `;
+
+
+
+    // Lisää tapahtumankäsittelijät
+    const infoBtn = div.querySelector('.info-btn');
+    infoBtn.addEventListener('click', function() {
+        const infoSection = div.querySelector('.info-section');
+        infoSection.style.display = infoSection.style.display === 'block' ? 'none' : 'block';
+    });
+
+    const bookBtn = div.querySelector('.book-btn');
+    bookBtn.addEventListener('click', function() {
+        // Tässä voisi olla koodia varauksen tekemiseen tai peruuttamiseen
+        console.log("Varausnappia painettu luokalle:", jumppa.class_id);
+    });
+
+    return div;
+}
+
+ /*        const finnishMonths = ["", "Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu"];
+
+        const startDate = new Date(jumppa.start_time);
+        const endDate = new Date(jumppa.end_time);
+        
+        const formattedStartDate = `${startDate.getDate()} ${finnishMonths[startDate.getMonth() + 1]} | ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')} - ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;        
+        const instructorName = data.instructors[jumppa.instructor_id];
+        const reservationCount = Number(jumppa.reservation_count) || 0;
+        console.log("Varausten määrä on:",jumppa.reservation_count);
+        const userHasReservation = jumppa.user_has_reservation > 0;
+        console.log("Käyttäjällä on varaus:",jumppa.user_has_reservation);
+        const buttonText = userHasReservation ? "Peruuta" : "Varaa";
+        console.log("Napin teksti on:",userHasReservation);
+        const buttonClass = userHasReservation ? "booked" : "";
+        console.log("Napin teksti on:",userHasReservation);
+
+
+        div.innerHTML = `
+            <div class="class-info">
+            <div class="date-time">${formattedStartDate}</div>
+            <div class="name">${jumppa.name} ${reservationCount}/${jumppa.capacity}</div>
+                <div class="location">Kuntosali: ${jumppa.address}</div>
+                <div class="instructor">${instructorName}</div>
+            </div>
+            <div class="class-actions">
+                <button class="info-btn">Info</button>
+                <div class="info-section">${jumppa.description}</div>
+                <button class="book-btn ${buttonClass}">${buttonText}</button>
+            </div>
+        `;
+
+        resultsDiv.appendChild(div);
+        console.log("Luokkakortti lisätty:", div);
+
+        addBookingListeners();
+
+        const infoBtn = div.querySelector('.info-btn');
+        infoBtn.addEventListener('click', function() {
+            const classCard = infoBtn.closest('.class-card');
+            const infoSection = classCard.querySelector('.info-section');
+            
+            if(infoSection.style.display === 'none' || infoSection.style.display === '') {
+                console.log("Näytetään lisätiedot luokalle:", jumppa);
+                infoSection.style.display = 'block';
+            } else {
+                console.log("Piilotetaan lisätiedot luokalle:", jumppa);
+                infoSection.style.display = 'none';
+            }
+        });
+    });
+} */
+
+/* document.querySelectorAll('select').forEach(select => {
+    select.addEventListener('change', function() {
+        console.log(`${select.id} muuttunut`);
+        fetchData();
+    });
+}); */
+
+
+
+
+
+
+
+
+original:
+
+ document.addEventListener('DOMContentLoaded', function() {
+    // Lisää tapahtumakuuntelija jokaiselle päiväelementille
+    document.querySelectorAll('.day').forEach(function(dayElement) {
+        dayElement.addEventListener('click', function() {
+            // Poista 'active'-luokka kaikilta päiviltä ja lisää se klikatulle päivälle
+            document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
+            this.classList.add('active');
+
+            // Haetaan valitun päivän data-day attribuutista
+            var selectedDate = this.getAttribute('data-day');
+
+            // Tee pyyntö palvelimelle hakeaksesi kyseisen päivän jumppatunnit
+            fetch('fetch_data.php?day=' + selectedDate)
+                .then(response => response.json())
+                .then(classes => {
+                    var classesList = document.querySelector('.classes-list');
+                    if (classesList) {
+                        // Tyhjennä nykyinen lista
+                        classesList.innerHTML = '';
+
+                        // Lisää uudet elementit
+                        classes.forEach(function(cl) {
+                            // Tässä sinun täytyy luoda HTML-elementti jokaiselle luokalle
+                            var classElement = document.createElement('div');
+                            classElement.className = 'class-card';
+                            classElement.innerHTML = `
+                                <div class="class-info">
+                                    <div class="date-time">${cl.start_time}</div>
+                                    <div class="name">${cl.name}</div>
+                                    // Lisää muut tiedot tässä
+                                </div>
+                                <div class="class-actions">
+                                    // Lisää toiminnot, kuten varausnappi
+                                </div>
+                            `;
+                            classesList.appendChild(classElement);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Virhe haettaessa tietoja:', error);
+                });
+        });
+    });
+});
+
+//Dynaaminen osio
+
+// Search-content dropdown elementit näyttävät class-cards valinnan mukaan
+//Valinnat seuraavat ensisijaisesti kaupunki elementtiä jolloin siihen reforoivat tiedot näkyy alasvetolaatikoissa
+
+// Funktio hakee tiedot palvelimelta valitsimien arvojen perusteella
+async function fetchData() {
+    console.log("fetchData kutsuttu");
+    // Haetaan valitsimien arvot
+    const city = document.querySelector('#citySelect').value || null;
+    const gym = document.querySelector('#gymSelect').value || null;
+    const className = document.querySelector('#classNameSelect').value || null;
+    const instructor = document.querySelector('#instructorSelect').value || null;
+    const startTime = document.querySelector('#startTime').value || null;
+    const endTime = document.querySelector('#endTime').value || null;
+    // Lähetettävät tiedot konsoliin
+    console.log("Lähetettävät tiedot:", { city, address: gym, instructor, name: className, startTime, endTime });
+
+    try {
+        // Lähetetään tiedot palvelimelle
+        console.log("Lähetetään tiedot palvelimelle");
+        const response = await fetch('fetch_data.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ city, address: gym, instructor, name: className, startTime, endTime })
+        });
+
+        // Jos vastaus ei ole ok, heitetään virhe
+        if (!response.ok) {
+            throw new Error(`Network response was not ok. Status: ${response.status}, Text: ${await response.text()}`);
+        }
+
+        // Muutetaan vastaus JSON-muotoon
+        console.log("Muutetaan vastaus JSON-muotoon");
+        const data = await response.json();
+        console.log("Palvelimelta saadut tiedot:", data);
+
+        // Jos vastauksessa on osoitteita, luokkien nimiä ja ohjaajia, päivitetään valitsimet
+        if (data.addresses && data.classNames && data.instructors) {
+            console.log("Päivitetään valitsimet ja UI");
+            updateDropdowns(data);
+            updateUI(data);
+        } else {
+            console.error("Odottamaton palvelimen vastaus");
+        }
+    } catch (error) {
+        // Jos tapahtuu virhe, näytetään virheviesti
+        console.error("Virhe:", error);
+        const resultsDiv = document.querySelector('.classes-list');
+        resultsDiv.innerHTML = '<p>Virhe: ' + error.message + '</p>';
+    }
+}
+
+// Funktio päivittää valitsimet palvelimelta saaduilla tiedoilla
+function updateDropdowns(data) {
+    console.log("Päivitetään valitsimet seuraavilla tiedoilla:", data);
+    updateDropdown('#gymSelect', data.addresses.map(address => ({ value: address, label: address })));
+    updateDropdown('#classNameSelect', data.classNames.map(name => ({ value: name, label: name })));
+    updateDropdown('#instructorSelect', Object.entries(data.instructors).map(([id, name]) => ({ value: id, label: name })));
+}
+
+// Funktio päivittää yksittäisen valitsimen
+function updateDropdown(selector, items, placeholder = "Valitse...") {
+    console.log(`Päivitetään valitsin ${selector} seuraavilla kohteilla:`, items);
+    const dropdown = document.querySelector(selector);
+    if (!dropdown) {
+        console.error(`Valitsinta ${selector} ei löydy.`);
+        return;
+    }
+    const currentValue = dropdown.value; // Tallennetaan nykyinen arvo
+    console.log(`Nykyinen arvo valitsimessa ${selector}:`, currentValue);
+    dropdown.innerHTML = `<option value="">${placeholder}</option>`; // Tyhjennetään valitsin ja lisätään "Valitse..." -vaihtoehto
+    items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.value;
+        option.textContent = item.label;
+        dropdown.appendChild(option);
+    });
+    dropdown.value = currentValue; // Asetetaan tallennettu arvo takaisin
+    console.log(`Valitsin ${selector} päivitetty.`);
+}
+
+// Funktio päivittää UI:n jumppatunneilla
+function updateUI(data) {
+    console.log("Saadut tiedot palvelimelta:", data);
+    const resultsDiv = document.querySelector('.classes-list');
+    resultsDiv.innerHTML = '';
+
+    if (!data.classes || data.classes.length === 0) {
+        console.log("Ei luokkia näytettäväksi.");
+        resultsDiv.innerHTML = '<p style="color: white;">Ei tuloksia</p>';
+        return;
+    }
+    console.log("Luokkadata:", data.classes);
+
+    data.classes.forEach(jumppa => {
+        console.log("Käsitellään luokkaa:", jumppa);
+        const div = document.createElement('div');
+        div.classList.add('class-card');
+        div.setAttribute('data-class-id', jumppa.class_id);
+
+        const finnishMonths = ["", "Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu"];
+
+        const startDate = new Date(jumppa.start_time);
+        const endDate = new Date(jumppa.end_time);
+        
+        const formattedStartDate = `${startDate.getDate()} ${finnishMonths[startDate.getMonth() + 1]} | ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')} - ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;        
+        const instructorName = data.instructors[jumppa.instructor_id];
+        const reservationCount = Number(jumppa.reservation_count) || 0;
+        console.log("Varausten määrä on:",jumppa.reservation_count);
+        const userHasReservation = jumppa.user_has_reservation > 0;
+        console.log("Käyttäjällä on varaus:",jumppa.user_has_reservation);
+        const buttonText = userHasReservation ? "Peruuta" : "Varaa";
+        console.log("Napin teksti on:",userHasReservation);
+        const buttonClass = userHasReservation ? "booked" : "";
+        console.log("Napin teksti on:",userHasReservation);
+
+
+        div.innerHTML = `
+            <div class="class-info">
+            <div class="date-time">${formattedStartDate}</div>
+            <div class="name">${jumppa.name} ${reservationCount}/${jumppa.capacity}</div>
+                <div class="location">Kuntosali: ${jumppa.address}</div>
+                <div class="instructor">${instructorName}</div>
+            </div>
+            <div class="class-actions">
+                <button class="info-btn">Info</button>
+                <div class="info-section">${jumppa.description}</div>
+                <button class="book-btn ${buttonClass}">${buttonText}</button>
+            </div>
+        `;
+
+        resultsDiv.appendChild(div);
+        console.log("Luokkakortti lisätty:", div);
+
+        addBookingListeners();
+
+        const infoBtn = div.querySelector('.info-btn');
+        infoBtn.addEventListener('click', function() {
+            const classCard = infoBtn.closest('.class-card');
+            const infoSection = classCard.querySelector('.info-section');
+            
+            if(infoSection.style.display === 'none' || infoSection.style.display === '') {
+                console.log("Näytetään lisätiedot luokalle:", jumppa);
+                infoSection.style.display = 'block';
+            } else {
+                console.log("Piilotetaan lisätiedot luokalle:", jumppa);
+                infoSection.style.display = 'none';
+            }
+        });
+    });
+}
+
+document.querySelectorAll('select').forEach(select => {
+    select.addEventListener('change', function() {
+        console.log(`${select.id} muuttunut`);
+        fetchData();
+    });
+});
+
+
+fetch_data.php GET PYYNNÖN KANSSA
+
+<?php
+// fetch_data.php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+session_start();
+require 'includes/dbconnect.php';
+
+header('Content-Type: application/json');
+
+// Tarkista pyynnön tyyppi
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // POST-pyyntöjen käsittely
+    $json = file_get_contents("php://input");
+    $data = json_decode($json);
+
+    if (!$data) {
+        echo json_encode(["status" => "error", "message" => "Invalid JSON data received."]);
+        exit;
+    }
+
+    if (!isset($data->city) || empty($data->city)) {
+        echo json_encode(["status" => "error", "message" => "City not selected."]);
+        exit;
+    }
+
+    $city = $data->city;
+    $user_id = $_SESSION['user_id'] ?? null;
+
+    try {
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare("SELECT DISTINCT address FROM Jumpat WHERE SUBSTRING_INDEX(address, ' ', -1) = :city");
+        $stmt->execute([':city' => $city]);
+        $addresses = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+        $stmt = $conn->prepare("SELECT DISTINCT name FROM Jumpat WHERE SUBSTRING_INDEX(address, ' ', -1) = :city");
+        $stmt->execute([':city' => $city]);
+        $classNames = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+        $stmt = $conn->prepare("SELECT DISTINCT j.instructor_id, o.name FROM Jumpat j JOIN Ohjaajat o ON j.instructor_id = o.instructor_id WHERE SUBSTRING_INDEX(j.address, ' ', -1) = :city");
+        $stmt->execute([':city' => $city]);
+        $instructors = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        $response = [
+            'addresses' => $addresses,
+            'classNames' => $classNames,
+            'instructors' => $instructors
+        ];
+
+        $whereClauses = ["SUBSTRING_INDEX(address, ' ', -1) = :city"];
+        $params = [':city' => $city];
+
+        if (isset($data->address) && !empty($data->address)) {
+            $whereClauses[] = "address LIKE :address";
+            $params[':address'] = '%' . $data->address . '%';
+        }
+        if (isset($data->instructor) && !empty($data->instructor)) {
+            $whereClauses[] = "instructor_id = :instructor_id";
+            $params[':instructor_id'] = $data->instructor;
+        }
+        if (isset($data->name) && !empty($data->name)) {
+            $whereClauses[] = "name = :name";
+            $params[':name'] = $data->name;
+        }
+        if (isset($data->startTime) && isset($data->endTime) && !empty($data->startTime) && !empty($data->endTime)) {
+            $whereClauses[] = "start_time BETWEEN :start_time AND :end_time";
+            $params[':start_time'] = $data->startTime;
+            $params[':end_time'] = $data->endTime;
+        }
+
+        $where = implode(' AND ', $whereClauses);
+        $sql = "SELECT j.*, 
+                   COUNT(v.class_id) as reservation_count, 
+                   SUM(v.customer_id = :user_id) as user_has_reservation
+            FROM Jumpat j
+            LEFT JOIN Varaukset v ON j.class_id = v.class_id
+            WHERE $where
+            GROUP BY j.class_id";
+
+        $params[':user_id'] = $user_id;
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($classes)) {
+            $response['classes'] = $classes;
+        }
+
+        $conn->commit();
+        echo json_encode($response);
+    } catch (PDOException $e) {
+        $conn->rollBack();
+        echo json_encode(["status" => "error", "message" => "Database error: " . $e->getMessage()]);
+        exit;
+    }
+} elseif ($_SERVER["REQUEST_METHOD"] === "GET") {
+    // GET-pyyntöjen käsittely
+    if (!isset($_SESSION['user_id'])) {
+        http_response_code(403); // Forbidden
+        echo json_encode(['error' => 'Unauthorized access']);
+        exit;
+    }
+
+    $selectedDate = $_GET['day'] ?? '';
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $selectedDate)) {
+        http_response_code(400); // Bad Request
+        echo json_encode(['error' => 'Invalid date format']);
+        exit;
+    }
+
+    try {
+        $query = "SELECT j.*, o.name as instructor_name
+              FROM Jumpat j
+              LEFT JOIN Ohjaajat o ON j.instructor_id = o.instructor_id
+              WHERE DATE(j.start_time) = :selectedDay";
+        $stmt = $conn->prepare($query);
+        $stmt->execute(['selectedDay' => $selectedDate]);
+        $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Haetaan ohjaajat
+        $instructorsQuery = "SELECT instructor_id, name FROM Ohjaajat";
+        $instructorsStmt = $conn->prepare($instructorsQuery);
+        $instructorsStmt->execute();
+        $instructors = $instructorsStmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        echo json_encode(['classes' => $classes, 'instructors' => $instructors]);
+    } catch (PDOException $e) {
+        http_response_code(500); // Internal Server Error
+        echo json_encode(['error' => $e->getMessage()]);
+    }
+} else {
+    // Muut pyyntötyypit
+    echo json_encode(["status" => "error", "message" => "Invalid request method."]);
+    exit;
+}
+
+
+
+UUSI POST:
+
+<?php
+// fetch_data.php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+session_start();
+require 'includes/dbconnect.php';
+
+header('Content-Type: application/json');
+
+// Tarkista pyynnön tyyppi
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // POST-pyyntöjen käsittely
+    $json = file_get_contents("php://input");
+    $data = json_decode($json);
+
+    if (!$data) {
+        echo json_encode(["status" => "error", "message" => "Invalid JSON data received."]);
+        exit;
+    }
+
+    if (!isset($data->city) || empty($data->city)) {
+        echo json_encode(["status" => "error", "message" => "City not selected."]);
+        exit;
+    }
+
+    $city = $data->city;
+    $user_id = $_SESSION['user_id'] ?? null;
+
+    try {
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare("SELECT DISTINCT address FROM Jumpat WHERE SUBSTRING_INDEX(address, ' ', -1) = :city");
+        $stmt->execute([':city' => $city]);
+        $addresses = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+        $stmt = $conn->prepare("SELECT DISTINCT name FROM Jumpat WHERE SUBSTRING_INDEX(address, ' ', -1) = :city");
+        $stmt->execute([':city' => $city]);
+        $classNames = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+        $stmt = $conn->prepare("SELECT DISTINCT j.instructor_id, o.name FROM Jumpat j JOIN Ohjaajat o ON j.instructor_id = o.instructor_id WHERE SUBSTRING_INDEX(j.address, ' ', -1) = :city");
+        $stmt->execute([':city' => $city]);
+        $instructors = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        $response = [
+            'addresses' => $addresses,
+            'classNames' => $classNames,
+            'instructors' => $instructors
+        ];
+
+        $whereClauses = ["SUBSTRING_INDEX(address, ' ', -1) = :city"];
+        $params = [':city' => $city];
+
+        if (isset($data->address) && !empty($data->address)) {
+            $whereClauses[] = "address LIKE :address";
+            $params[':address'] = '%' . $data->address . '%';
+        }
+        if (isset($data->instructor) && !empty($data->instructor)) {
+            $whereClauses[] = "instructor_id = :instructor_id";
+            $params[':instructor_id'] = $data->instructor;
+        }
+        if (isset($data->name) && !empty($data->name)) {
+            $whereClauses[] = "name = :name";
+            $params[':name'] = $data->name;
+        }
+        if (isset($data->startTime) && isset($data->endTime) && !empty($data->startTime) && !empty($data->endTime)) {
+            $whereClauses[] = "start_time BETWEEN :start_time AND :end_time";
+            $params[':start_time'] = $data->startTime;
+            $params[':end_time'] = $data->endTime;
+        }
+
+        $where = implode(' AND ', $whereClauses);
+        $sql = "SELECT j.*, 
+                   COUNT(v.class_id) as reservation_count, 
+                   SUM(v.customer_id = :user_id) as user_has_reservation
+            FROM Jumpat j
+            LEFT JOIN Varaukset v ON j.class_id = v.class_id
+            WHERE $where
+            GROUP BY j.class_id";
+
+        $params[':user_id'] = $user_id;
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($classes)) {
+            $response['classes'] = $classes;
+        }
+
+        $conn->commit();
+        echo json_encode($response);
+    } catch (PDOException $e) {
+        $conn->rollBack();
+        echo json_encode(["status" => "error", "message" => "Database error: " . $e->getMessage()]);
+        exit;
+    }
+// Tarkista onko pyynnössä 'day' (päivämäärä), joka vastaa aiempaa GET-pyyntöä
+if (isset($data->day) && !empty($data->day)) {
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $data->day)) {
+        echo json_encode(['error' => 'Invalid date format']);
+        exit;
+    }
+
+    $selectedDate = $data->day;
+
+    // Suorita päivämäärän mukainen kysely
+    try {
+        $query = "SELECT j.*, o.name as instructor_name
+                  FROM Jumpat j
+                  LEFT JOIN Ohjaajat o ON j.instructor_id = o.instructor_id
+                  WHERE DATE(j.start_time) = :selectedDay";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([':selectedDay' => $selectedDate]);
+        $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Haetaan ohjaajat
+        $instructorsQuery = "SELECT instructor_id, name FROM Ohjaajat";
+        $instructorsStmt = $conn->prepare($instructorsQuery);
+        $instructorsStmt->execute();
+        $instructors = $instructorsStmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        echo json_encode(['classes' => $classes, 'instructors' => $instructors]);
+        exit;
+    } catch (PDOException $e) {
+        http_response_code(500); // Internal Server Error
+        echo json_encode(['error' => $e->getMessage()]);
+        exit;
+    }
+}
+
+} else {
+    // Muut pyyntötyypit
+    echo json_encode(["status" => "error", "message" => "Invalid request method."]);
+    exit;
+}
+
+
+
+EX script dayElement get pyyntö:
+
+document.querySelectorAll('.day').forEach(function(dayElement) {
+    dayElement.addEventListener('click', function() {
+        document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
+        this.classList.add('active');
+
+        const selectedDate = this.getAttribute('data-day');
+
+        fetch('fetch_data.php?day=' + selectedDate)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Saatu data:", data); // Tulostetaan koko vastaus konsoliin
+            if (Array.isArray(data.classes) && data.classes.length > 0) {
+                updateUI(data.classes, data.instructors);
+                addBookingListeners();
+            } else {
+                console.error("Data ei sisällä luokkia:", data);
+                const resultsDiv = document.querySelector('.classes-list');
+                resultsDiv.innerHTML = '<p style="color: white;">Tietoja ei ole saatavilla valitulle päivämäärälle.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Virhe haettaessa tietoja:', error);
+            const resultsDiv = document.querySelector('.classes-list');
+            resultsDiv.innerHTML = '<p>Virhe: ' + error.message + '</p>';
+        });
+});
+});
+
+
+Toimiva get pyynnön tapahtumakuuntelija: 
+
+document.querySelectorAll('.day').forEach(function(dayElement) {
+    dayElement.addEventListener('click', function() {
+        document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
+        this.classList.add('active');
+
+        const selectedDate = this.getAttribute('data-day');
+        const selectedCity = document.querySelector('#citySelect').value;
+
+       // Ei enää vaadita kaupungin valintaa
+        // fetch-kutsuun lisätään kaupunki vain, jos se on valittu
+        const cityParam = selectedCity ? `&city=${selectedCity}` : '';
+        fetch(`fetch_data.php?day=${selectedDate}${cityParam}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Saatu data päiväelementistä:", data); // Tämä logi näyttää sinulle, mitä dataa saat.
+            if (Array.isArray(data.classes) && data.classes.length > 0) {
+                updateUI(data.classes, data.instructors);
+            } else {
+                console.error("Data ei sisällä luokkia:", data);
+                const resultsDiv = document.querySelector('.classes-list');
+                resultsDiv.innerHTML = '<p style="color: white;">Tietoja ei ole saatavilla valitulle päivämäärälle.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Virhe haettaessa tietoja:', error);
+            const resultsDiv = document.querySelector('.classes-list');
+            resultsDiv.innerHTML = '<p>Virhe: ' + error.message + '</p>';
+        });
+    });
+});

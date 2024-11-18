@@ -1,0 +1,65 @@
+
+/* function decryptCustomerData($conn) {
+    // Haetaan kaikki salatut asiakastiedot
+    $query = "SELECT customer_id, name, email, phone, address FROM customer";
+    $result = mysqli_query($conn, $query);
+
+    if (!$result) {
+        die("Database query failed: " . mysqli_error($conn));
+    }
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        // Puretaan salatut tiedot
+        $decryptedName = openssl_decrypt($row['name'], 'AES-256-CBC', ENCRYPTION_KEY, 0, ENCRYPTION_IV);
+        $decryptedEmail = openssl_decrypt($row['email'], 'AES-256-CBC', ENCRYPTION_KEY, 0, ENCRYPTION_IV);
+        $decryptedPhone = openssl_decrypt($row['phone'], 'AES-256-CBC', ENCRYPTION_KEY, 0, ENCRYPTION_IV);
+        $decryptedAddress = openssl_decrypt($row['address'], 'AES-256-CBC', ENCRYPTION_KEY, 0, ENCRYPTION_IV);
+
+        // Tulostetaan tai käsitellään purettuja tietoja tarpeen mukaan
+        echo "Customer ID: {$row['customer_id']}<br>";
+        echo "Name: {$decryptedName}<br>";
+        echo "Email: {$decryptedEmail}<br>";
+        echo "Phone: {$decryptedPhone}<br>";
+        echo "Address: {$decryptedAddress}<br><br>";
+    }
+}
+
+// Kutsu purkufunktiota
+decryptCustomerData($conn); */
+
+
+
+Tässä versiossa funktio decryptAndDisplayCustomerData hakee salatut tiedot tietokannasta, purkaa niiden salauksen ja näyttää ne selkokielisinä. Tietokantaan ei tehdä muutoksia, joten salatut tiedot pysyvät salattuina tietokannassa.---->
+
+
+function decryptAndDisplayCustomerData($conn)
+{
+    // Haetaan kaikki salatut asiakastiedot
+    $query = "SELECT customer_id, name, email, phone, address FROM Asiakkaat";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // Puretaan salaus
+        $decryptedName = openssl_decrypt($row['name'], 'AES-256-CBC', ENCRYPTION_KEY, 0, ENCRYPTION_IV);
+        $decryptedEmail = openssl_decrypt($row['email'], 'AES-256-CBC', ENCRYPTION_KEY, 0, ENCRYPTION_IV);
+        $decryptedPhone = openssl_decrypt($row['phone'], 'AES-256-CBC', ENCRYPTION_KEY, 0, ENCRYPTION_IV);
+        $decryptedAddress = openssl_decrypt($row['address'], 'AES-256-CBC', ENCRYPTION_KEY, 0, ENCRYPTION_IV);
+
+        // Tarkista, onnistuiko salauksen purkaminen
+        if ($decryptedName === false || $decryptedEmail === false || $decryptedPhone === false || $decryptedAddress === false) {
+            die("Error decrypting data");
+        }
+
+        // Näytä selväkieliset tiedot (tätä osaa voidaan muokata tarpeen mukaan)
+        echo "Customer ID: " . $row['customer_id'] . "\n";
+        echo "Name: " . $decryptedName . "\n";
+        echo "Email: " . $decryptedEmail . "\n";
+        echo "Phone: " . $decryptedPhone . "\n";
+        echo "Address: " . $decryptedAddress . "\n";
+        echo "--------------------------\n";
+    }
+}
+
+// Kutsu funktiota
+decryptAndDisplayCustomerData($conn);

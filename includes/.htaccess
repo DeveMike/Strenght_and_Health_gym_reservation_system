@@ -1,0 +1,3 @@
+# Estä suora pääsy kaikkiin tiedostoihin tässä kansiossa
+deny from all
+

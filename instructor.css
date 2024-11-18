@@ -1,0 +1,355 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Profiili stylet*/
+.user-profile {
+    background-color: #0a0a0a;
+    height: 300px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    justify-items: center;
+    align-items: center;
+    border-bottom: #068d40 solid 1rem;
+    position: relative; 
+}
+
+.info-box1,
+.info-box3,
+.info-box2,
+.info-box4 {
+    font-size: 30px;
+    color: white;
+    background-color: #000000;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    width: auto;
+    height: 50px;
+}
+
+.info-box1 {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.info-box3 {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.info-box2 {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.info-box4 {
+    grid-column: 2;
+    grid-row: 2;
+    color: yellow;
+}
+
+.edit-profile-link {
+    text-decoration: none; 
+    color: yellow; 
+    font-weight: bold; 
+    position: absolute; 
+    bottom: 0; 
+    right: calc(0px + 1.7cm); 
+    padding: 30px; 
+}
+
+.membership-details {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0a0a0a;
+}
+
+
+.add-button {
+    background-color:#07a04a ;
+    color: white;
+    padding: 15px 60px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.add-button:hover {
+    background-color:#068d40;
+}
+
+.white-section {
+    height: 100vh;
+    background: linear-gradient(to bottom, #202A46, #2C3C57, #334762);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-container {
+    display: flex;
+    justify-content: space-between;
+    width: 80%; 
+}
+
+.title {
+    color: white;
+    text-align: center;
+    border-bottom: 2px solid green;
+    margin-bottom: 10px;
+}
+
+.box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.reservations-box {
+    background-color: black;
+    width: 90%;
+    height: auto;
+    max-height: 90vh;
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-container {
+    background-color: #fff;
+    padding: 2rem;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #333;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="datetime-local"],
+.form-group input[type="number"],
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+input[type="submit"] {
+    background-color: #5cb85c;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+input[type="submit"]:hover {
+    background-color: #4cae4c;
+}
+
+.booked-box{
+    background-color: black;
+    width: 90%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    height: 84vh;
+    overflow-y: auto;
+}
+
+.class-card {
+    display: flex;
+    max-width: 100%;
+    width: 500px;
+    gap: 20px;
+    background-color: white;
+    border-radius: 10px;
+    height: 20vh;
+    margin-bottom: 20px;
+    padding: 20px;
+    align-items: center;
+    position: relative; 
+}
+.class-actions {
+    display: flex;
+    padding-top: 10px;
+    align-items: center;
+}
+
+.info-section {
+    display: none;
+    background-color: yellow;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(-100%);
+    padding: 5px;
+    text-align: center;
+    z-index: 1; 
+}
+
+.book-msg {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(100%); /*  siirtymä alapuoelle */
+    padding: 5px;
+    text-align: center;
+    z-index: 1; 
+}
+
+.book-msg.green {
+    background-color: green;
+    color: white;
+}
+
+.book-msg.red {
+    background-color: red;
+    color: white;
+}
+
+.info-btn, .book-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    width: 100px;
+    margin-bottom: 10px;
+    margin-left: 5rem; /* Siirretään napit oikealle */
+}
+
+.info-btn {
+    background-color: yellow;
+    cursor: pointer;
+}
+
+.book-btn {
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+@media only screen and (max-width: 600px) {
+    .user-profile {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, auto);
+        height: 30vh;
+    }
+
+    .info-box1, .info-box2, .info-box3, .info-box4 {
+        font-size: 15px;
+        width: 90%;
+        margin-bottom: 10px;
+    }
+
+    .edit-profile-link {
+        right: 10px;
+        bottom: 10px;
+        padding: 10px;
+    }
+
+    .white-section{
+        height: 200vh;
+    }
+
+    .content-container, .reservations-box, .form-container, .booked-box, .class-card {
+        width: 95%;
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    .class-actions {
+        gap:20px;
+    }
+
+    .info-btn, .book-btn {
+        margin: 0;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 767px) {
+    .user-profile {
+        height: 400px;
+    }
+
+    .info-box1, .info-box2, .info-box3, .info-box4 {
+        font-size: 25px;
+    }
+
+    .edit-profile-link {
+        right: 20px;
+        bottom: 20px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .user-profile {
+        height: 350px;
+    }
+
+    .info-box1, .info-box2, .info-box3, .info-box4 {
+        width: 80%;
+    }
+
+    .edit-profile-link {
+        right: 30px;
+        bottom: 30px;
+    }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .user-profile {
+        height: 300px;
+    }
+
+    .info-box1, .info-box2, .info-box3, .info-box4 {
+        width: 70%;
+    }
+
+    .edit-profile-link {
+        right: 40px;
+        bottom: 40px;
+    }
+}

@@ -1,0 +1,408 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+
+/*Varaus osion tyylit*/
+.content-container {
+    display: flex;
+    gap: 24px;
+    padding: 65px; 
+    background: linear-gradient(to bottom, #202A46, #2C3C57, #334762);
+}
+
+
+.search-container, .classes-container {
+    background-color: #0a0a0a;
+    padding: 20px;
+}
+.search-container {
+    width: 32.3vw;
+    height: 75vh;
+    position: relative;
+    
+}
+.centered-title {
+    color: #fff;
+    text-align: center;
+}
+
+
+.yellow-lines {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 149px;
+}
+
+.yellow-line1 {
+    width: 65px;
+    height: 3px;
+    background-color: yellow;
+    border: none;
+    margin: 5px 0;
+}
+
+.yellow-line2{
+    width: 55px;
+    height: 3px;
+    background-color: yellow;
+    border: none;
+    margin: 5px 0;
+    margin-bottom: 20px;
+}
+
+label{
+    color: white;
+    padding-bottom:5px;
+}
+
+select{
+    height:3vh;
+}
+
+ label, .dropdown, .time-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+
+
+.centered-title_filters-title{
+    text-align: center;
+    color: #fff;
+    padding: 20px 10px;
+    margin-top: 10px;
+    margin-bottom:-2.5rem;
+}
+
+
+.dropdown, .time-filter {
+    margin-top: 30px;
+}
+
+.classes-container {
+    width: 661px;
+    height: 115vh;
+    /* height: 1000px; */
+    /* overflow-y: scroll;  */
+}
+.class-card:first-child {
+    margin-top: 20px;
+}
+
+.classes-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    max-height: 97vh;
+    overflow-y: auto;
+}
+
+
+.weekdays {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.day {
+    width: 80px;
+    height: 80px;
+    background-color: yellow;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.day.active {
+    background-color: red;
+}
+
+.class-card {
+    display: flex;
+    max-width: 100%;
+    gap: 20px;
+    background-color: white;
+    border-radius: 10px;
+    width: 500px;
+    height: 187px;
+    margin-bottom: 20px;
+    padding: 20px;
+    align-items: center;
+    position: relative; 
+}
+.class-actions {
+    display: flex;
+    flex-direction: column; /* Asetetaan napit pystysuoraksi */
+    gap: 10px; 
+}
+
+.info-section {
+    display: none;
+    background-color: yellow;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(-100%);
+    padding: 5px;
+    text-align: center;
+    z-index: 1; 
+}
+
+.book-msg {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(100%); /*  siirtymä alapuoelle */
+    padding: 5px;
+    text-align: center;
+    z-index: 1; 
+}
+
+.book-msg.green {
+    background-color: green;
+    color: white;
+}
+
+.book-msg.red {
+    background-color: red;
+    color: white;
+}
+
+.info-btn, .book-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    width: 100px;
+    margin-bottom: 10px;
+    margin-left: 5rem; /* Siirretään napit oikealle */
+}
+
+.info-btn {
+    background-color: yellow;
+    cursor: pointer;
+}
+
+.book-btn {
+    background-color: green;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 0; /* Poistetaan väli alimmalta napilta, jotta se ei työnnä muita elementtejä pois */
+}
+
+.booked {
+    background-color: red;
+}
+
+@media only screen and (max-width: 600px) {
+    .content-container {
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+        height: auto;
+        max-height: 300vh;
+    }
+
+    .search-container {
+        width: 100%;
+        height: auto;
+    }
+    .yellow-lines {
+        margin-left: 93px;
+    }
+    
+
+
+.day{
+    height: 8vh;
+}
+
+    .classes-container {
+        width: 100%;
+        height: auto;
+    }
+
+    .class-card {
+        width: 95%;
+        height:20vh;
+    }
+
+    .class-actions{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap:wrap;
+        justify-content:flex-end;
+        margin-left: -4rem;
+
+    }
+
+    .class-info{
+    font-size: 13px;
+    width: 39vw;
+    }
+
+    .info-btn, .book-btn {
+        margin-left: 0;
+        width: 60%;
+    }
+
+    .info-btn {
+    padding: 10px 20px;
+    margin: 0;
+    }
+
+    
+}
+
+@media only screen and (min-width: 600px) and (max-width: 767px) {
+    .content-container {
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+        height: auto;
+        max-height: 300vh;
+    }
+
+    .search-container {
+        width: 100%;
+        height: auto;
+    }
+    .yellow-lines {
+        margin-left: 93px;
+    }
+
+    label, .dropdown, .time-filter{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    }
+
+.day{
+    height: 8vh;
+}
+
+    .classes-container {
+        width: 100%;
+        height: auto;
+    }
+
+    .class-card {
+        flex-direction: column;
+        width: 95%;
+        height:20vh;
+    }
+
+    .class-actions{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 55px;
+    }
+
+    .class-info{
+        font-size: 15px;
+    }
+
+    .info-btn, .book-btn {
+        margin-left: 0;
+        width: 60%;
+    }
+
+    .info-btn {
+    padding: 10px 20px;
+    margin: 0;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .content-container {
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+        height: auto;
+        max-height: 300vh;
+    }
+
+    .search-container {
+        width: 100%;
+        height: auto;
+    }
+    .yellow-lines {
+        margin-left: 93px;
+    }
+
+    label, .dropdown, .time-filter{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    }
+
+.day{
+    height: 8vh;
+}
+
+    .classes-container {
+        width: 100%;
+        height: auto;
+    }
+
+    .class-card {
+        flex-direction: column;
+        width: 95%;
+        height:20vh;
+    }
+
+    .class-actions{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 55px;
+    }
+
+    .class-info{
+        font-size: 15px;
+    }
+
+    .info-btn, .book-btn {
+        margin-left: 0;
+        width: 60%;
+    }
+
+    .info-btn {
+    padding: 10px 20px;
+    margin: 0;
+    }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .content-container {
+        padding: 50px;
+    }
+
+    .search-container {
+        width: 70%;
+    }
+
+    .classes-container {
+        width: 70%;
+    }
+}

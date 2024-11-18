@@ -1,0 +1,43 @@
+/* Yleinen asettelu */
+  *{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.body{
+    display:flex;
+    background: linear-gradient(to bottom, #202A46, #2C3C57, #334762);
+    height:50vh;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+/* Ilmoituslaatikot */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+
+
+

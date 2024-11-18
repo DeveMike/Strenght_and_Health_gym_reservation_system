@@ -1,0 +1,373 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+/* Nav barin tyyli */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0a0a0a;
+    height: 123px;
+    padding: 0 69px;
+    color: #ffffff;
+    border-bottom: #07a04a solid 1px;
+}
+
+.logo {
+    width: 296px;
+    height: 57px;
+}
+
+.nav-links {
+    margin-top: 12px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.nav-links li {
+    margin-right: 30px; /* Linkkien väli */
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    letter-spacing: 0;
+    position: relative;
+}
+
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    position: relative; /* Lisätty tähän */
+}
+
+.icon {
+    margin-left: 5px;
+    transition: transform 0.3s;
+}
+
+/* Lisätty kääntyvä ikoni */
+.has-dropdown:hover .icon {
+    transform: rotate(180deg);
+}
+
+/* Tyyli alamenuille */
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #0a0a0a;
+    opacity: 0.9;
+    border-radius: 0 0 5px 5px;
+    padding: 10px;
+    min-width: 100%;
+    z-index: 1;
+    border-top: 2px solid #07a04a;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.submenu ul li a {
+    border-bottom: 1px solid #DF2835; 
+    padding-bottom: 5px; 
+}
+
+
+.submenu ul li a {
+    display: inline-block; 
+    text-align: center; /* Lisätty vaakasuuntainen keskittäminen VAIVALLA.. */
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+.submenu ul li a.submenu-link {
+    text-align: center;
+}
+
+
+.has-dropdown ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin-left: 0;
+
+}
+
+.has-dropdown li {
+    margin: 0;
+    padding: 5px 5px; 
+    text-align: center;
+    font-size: 15px;
+}
+
+.has-dropdown:hover .submenu {
+    display: block;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+}
+
+.join-button {
+    text-decoration: none;
+    background-color: #df2835;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: "Montserrat-Medium", sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+    text-align: center;
+    margin-right: 20px;
+    transition: background-color 0.3s ease;
+    
+}
+
+.login-button {
+    text-decoration: none;
+    background-color: #068d40;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: "Montserrat-Medium", sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+    text-align: center;
+    margin-right: 20px;
+    transition: background-color 0.3s ease;
+}
+
+
+.login-button:hover {
+    background-color: #d11622;
+}
+
+.join-button:hover {
+    background-color: #068d40;
+}
+
+.form-container{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #202A46, #2C3C57, #334762);
+    color: #ffffff;
+    padding: 20px;
+    margin: 0;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    text-align: center;
+    width: 30%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+fieldset {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+legend {
+    padding: 0 10px;
+    font-weight: bold;
+}
+
+input[static] {
+    color: rgb(0, 0, 0);
+    opacity: 1; /* Varmista, että placeholder-teksti ei ole haalea */
+}
+
+fieldset[disabled] input::placeholder {
+    color: red;
+    opacity: 1;
+}
+
+
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"] {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+}
+
+input[readonly] {
+    background-color: #e9e9e9;
+}
+
+
+fieldset div {
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+button[type="submit"].tallenna {
+    background-color: #4CAF50;
+    color: white;
+    display: flex;
+    margin: auto;
+}
+
+button[name="muutaSalasana"] {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Footer tyylit */
+
+.footer {
+    position: relative;
+    height: 280px;
+    background-color: #fff;
+    padding: 0 65px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.footer-logo img {
+    width: 369px;
+    height: 76px;
+}
+
+.footer-section {
+    padding: 40px;
+}
+
+
+.footer-section h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 5px;
+}
+
+.footer-section ul li a {
+    text-decoration: none;
+    color: #000;
+    font-size: 14px;
+}
+
+.footer-section p {
+    font-size: 14px;
+    margin-top: 10px;
+    color: #000;
+}
+
+.footer-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-button,
+.join-button {
+    width: 150px;
+    height: 40px;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.footer-line {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #07a04a;
+}
+    .footer-text {
+        position: absolute;
+        left: 65px;
+        bottom: 0;
+        color: #0a0a0a;
+    }
+    
+    /* Ikonit ja teksti "Seuraa meitä" */
+    .footer-icons {
+        position: absolute;
+        right: 65px;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .footer-icons p {
+        color: #0a0a0a;
+        margin-right: 5px;
+    }
+    
+    .footer-icons img {
+        width: 24px;
+        margin-right: 10px;
+    }
+
+/* Responsive design */
+@media (max-width: 600px) {
+    fieldset div {
+        flex-direction: column;
+    }
+}

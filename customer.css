@@ -1,0 +1,438 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    text-align: center;
+    width: 40%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+
+/* Profiili stylet*/
+.user-profile {
+    background-color: #0a0a0a;
+    height: 300px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    justify-items: center;
+    align-items: center;
+    border-bottom: #068d40 solid 1rem;
+    position: relative; 
+}
+
+.info-box1,
+.info-box3,
+.info-box2,
+.info-box4 {
+    font-size: 30px;
+    color: white;
+    background-color: #000000;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    width: auto;
+    height: 50px;
+}
+
+.info-box1 {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.info-box3 {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.info-box2 {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.info-box4 {
+    grid-column: 2;
+    grid-row: 2;
+    color: yellow;
+}
+
+.edit-profile-link {
+    text-decoration: none; 
+    color: yellow; 
+    font-weight: bold; 
+    position: absolute; 
+    bottom: 0; 
+    right: calc(0px + 1.7cm); 
+    padding: 30px; 
+}
+
+.membership-details {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    background-color: #0a0a0a;
+    padding: 20px 2.2cm;
+    justify-content: space-between;
+}
+
+.day-element {
+    font-size: 32px;
+    color: #ccc;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    
+}
+
+.cancel-button {
+    background-color: red;
+    color: white;
+    padding: 15px 60px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 0 20px;
+}
+
+.membership-price {
+    font-size: 32px;
+    color: #ccc;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+
+}
+
+.cancel-button:hover {
+    background-color: darkred;
+}
+
+.white-section {
+    height: 80vh;
+    background: linear-gradient(to bottom, #202A46, #2C3C57, #334762);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-container {
+    display: flex;
+    justify-content: space-between;
+    width: 80%; 
+}
+
+.title, .title a {
+    text-align: center;
+    color: white;
+    border-bottom: 2px solid green;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.title a:hover{
+    color: red;
+}
+
+.title-link{
+    text-decoration: none;
+}
+
+.box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.reservations-box {
+    background-color: black;
+    width: 90%;
+    height: auto;
+    max-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.reservations-container {
+    width: 33vw;
+    background-color: #068d40;
+    margin: 1rem;
+    padding: 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto;
+}
+
+
+.booking-link {
+    margin-top: 2.5rem;
+    font-size: 2.5em;
+    color: white;
+    text-decoration: none;
+}
+
+.plus-icon {
+    font-size: 2rem;
+    color: white;
+    margin-top: 10px;
+}
+.reservations-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+.class-card {
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    height: 24vh;
+    padding: 20px;
+    margin: 0.5rem;
+    align-items: center;
+    position: relative; 
+    cursor:initial;
+}
+
+.class-actions {
+    display: flex;
+    flex-direction: column; /* Asetetaan napit pystysuoraksi */
+    gap: 10px; 
+}
+
+.info-section {
+    display: none;
+    background-color: yellow;
+    position: absolute;
+    border-radius: 5px 5px 0 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(-100%); /* Siirretään  yläpuolelle */
+    padding: 5px;
+    text-align: center;
+    z-index: 1; 
+}
+
+
+
+.booking-id{
+    color: #d11622;
+}
+
+.instructor-name{
+    color: #07a04a;
+}
+
+.info-btn, .cancel-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    width: 100px;
+    margin-bottom: 10px;
+    margin-left: 5rem; /* Siirretään napit oikealle */
+}
+
+.info-btn {
+    background-color: yellow;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: red;
+    color: white;
+    cursor: pointer;
+}
+
+
+.payment-details-box{
+    background-color: black;
+    width: 90%;
+    max-height: 73vh;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.scrollable {
+    overflow-y: auto;
+}
+
+.info-box {
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 1rem; 
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+}
+
+.info-box > div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.payment-status {
+    color: green;
+}
+
+@media only screen and (max-width: 600px) {
+    .alert {
+        width: 90%;
+    }
+
+    .user-profile {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, auto);
+        height: 30vh;
+    }
+
+    .info-box1, .info-box2, .info-box3, .info-box4 {
+        font-size: 15px;
+        width: 90%;
+    }
+
+    .membership-details {
+        height: auto;
+    }
+
+    .day-element, .membership-price {
+        font-size: 15px;
+    }
+    .day-element{
+        margin-left: -35px;
+        width: 10vh;
+    }
+
+    .cancel-button {
+        padding: 10px 30px;
+    }
+
+    .white-section{
+        height: 115vh;
+    }
+
+    .content-container {
+        flex-direction: column;
+        width: 90%;
+
+    }
+
+    .black-box{
+        padding: 15px;
+        height: auto;
+        max-height: 47vh;
+    }
+
+
+    .reservations-container, .payment-details-box {
+        width: 100%;
+    }
+
+    .info-box{
+        width: 90%;
+    }
+
+    .info-btn, .cancel-btn {
+        margin-left: 0;
+    }
+
+    .box{
+        margin-top: 30px;
+    }
+
+    .class-card{
+        width: 70vw;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 767px) {
+    .alert {
+        width: 80%;
+    }
+
+    .user-profile {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, auto);
+    }
+
+    .info-box1, .info-box2, .info-box3, .info-box4 {
+        font-size: 25px;
+        width: 80%;
+    }
+
+    .day-element, .membership-price {
+        font-size: 28px;
+    }
+
+    .reservations-container, .payment-details-box, .info-box {
+        width: 90%;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .alert {
+        width: 70%;
+    }
+
+    .info-box1, .info-box2, .info-box3, .info-box4 {
+        width: 70%;
+    }
+
+    .reservations-container, .payment-details-box, .info-box {
+        width: 80%;
+    }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .alert {
+        width: 60%;
+    }
+
+    .info-box1, .info-box2, .info-box3, .info-box4 {
+        width: 60%;
+    }
+
+    .reservations-container, .payment-details-box, .info-box {
+        width: 70
+    }
+}

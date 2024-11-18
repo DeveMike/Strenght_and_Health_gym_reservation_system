@@ -1,0 +1,533 @@
+ 
+/* Nav barin tyyli */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0a0a0a;
+    height: 123px;
+    padding: 0 69px;
+    color: #ffffff;
+    border-bottom: #07a04a solid 1px;
+}
+
+
+a.specific-link {
+  display: inline-block; /* Mahdollistaa leveyden ja korkeuden määrittelyn */
+  width: 250px; /* Asettaa linkin leveydeksi puolet kuvan alkuperäisestä leveydestä */
+  height: auto; /* Korkeus säätää automaattisesti pitämään kuvasuhteen */
+  box-sizing: border-box; /* Varmistaa, että padding ja border sisältyvät kokonaisleveyteen */
+}
+
+a.specific-link img.logo {
+  width: 100%; /* Skaalaa kuvan leveyden täyttämään koko linkin leveyden */
+  height: auto; /* Korkeus säätää automaattisesti pitämään kuvasuhteen */
+}
+
+.nav-links {
+    margin-top: 12px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.nav-links li {
+    margin-right: 30px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    letter-spacing: 0;
+    position: relative;
+}
+
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.icon {
+    margin-left: 5px;
+    transition: transform 0.3s;
+}
+
+/* Lisätty kääntyvä ikoni */
+.has-dropdown:hover .icon {
+    transform: rotate(180deg);
+}
+
+/* Tyyli alamenuille */
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #0a0a0a;
+    opacity: 0.9;
+    border-radius: 0 0 5px 5px;
+    padding: 10px;
+    min-width: 100%;
+    z-index: 1;
+    border-top: 2px solid #07a04a;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.submenu ul li a {
+    border-bottom: 1px solid #DF2835; 
+    padding-bottom: 5px; 
+}
+
+
+.submenu ul li a {
+    display: inline-block; 
+    text-align: center; /* Lisätty vaakasuuntainen keskittäminen VAIVALLA.. */
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+.submenu ul li a.submenu-link {
+    text-align: center;
+}
+
+
+.has-dropdown ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin-left: 0; 
+}
+
+.has-dropdown li {
+    margin: 0;
+    padding: 5px 5px; 
+    text-align: center;
+    font-size: 15px;
+}
+
+.has-dropdown:hover .submenu {
+    display: block;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+}
+
+.join-button {
+    text-decoration: none;
+    background-color: #df2835;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: "Montserrat-Medium", sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    text-align: center;
+    margin-right: 20px;
+    transition: background-color 0.3s ease;
+    
+}
+
+.login-button {
+    text-decoration: none;
+    background-color: #068d40;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: "Montserrat-Medium", sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    text-align: center;
+    margin-right: 20px;
+    transition: background-color 0.3s ease;
+}
+
+
+.login-button:hover {
+    background-color: #d11622;
+}
+
+.join-button:hover {
+    background-color: #068d40;
+}
+
+.burger-menu {
+    display: none;
+    cursor: pointer;
+    padding: 15px;
+    z-index: 3; /* Varmista, että tämä on korkeampi kuin nav-links */
+}
+
+.burger-menu div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2); /* Säädä läpinäkyvyyttä tarpeen mukaan */
+    display: none;
+    z-index: 2; /* Varmista, että tämä on pienempi kuin burger-menu:n z-index */
+}
+
+.burger-menu.toggle .line1 {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.burger-menu.toggle .line2 {
+    opacity: 0;
+}
+
+.burger-menu.toggle .line3 {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+
+    .navbar {
+        flex-direction: column;
+        padding: 20px 0px;
+        height: auto;
+    }
+    
+     a.specific-link {
+    width: 260px; /* Vieläkin pienempi leveys erittäin pienille näytöille */
+    margin-bottom:20px;
+    margin-left:-15px;
+  }
+
+  
+
+    .nav-links {
+        position: fixed;
+        flex-direction: column;
+        top: 0;
+        right: -49%;
+        width: 49%;
+        height: 100%;
+        margin-top: 0;
+        padding-top: 90px;
+        background-color: #068d41a1;
+        transition: right 0.3s ease;
+        overflow-y: auto;
+        z-index: 3;
+    }
+
+    .nav-links.active {
+        right: 0;
+
+    }
+
+    .nav-links a {
+        font-size: 1.2em;
+        padding: 10px;
+        justify-content: center;
+    }
+    
+    .nav-links li {
+        width: 100%; /* Täysi leveys */
+        text-align: center; /* Keskittää tekstin */
+        margin: 10px 0px; /* Säädä marginaalia tarpeen mukaan */
+    }
+
+
+    .has-dropdown .submenu {
+        background-color: rgb(0, 0, 0);
+    }
+
+    .has-dropdown.active .submenu {
+        display: block;
+    }
+
+    .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.382);
+        display: none;
+        z-index: 1;
+    }
+
+    .burger-menu {
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px; /* Siirretään oikealle yläkulmaan */
+    }
+
+ .buttons{
+    gap: 30px;
+ }
+
+    .login-button,
+    .join-button{
+        margin-right: 0;
+    }
+    
+    
+}
+
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) and (max-width: 767px) {
+
+    .navbar {
+        flex-direction: column;
+        padding: 20px 15px;
+        height: auto;
+    }
+    
+    .logo {
+        margin: 0 auto;
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+    
+     
+
+  
+
+    .nav-links {
+        position: fixed;
+        flex-direction: column;
+        top: 0;
+        right: -49%;
+        width: 49%;
+        height: 100%;
+        margin-top: 0;
+        padding-top: 90px;
+        background-color: #068d41a1;
+        transition: right 0.3s ease;
+        overflow-y: auto;
+        z-index: 3;
+    }
+
+    .nav-links.active {
+        right: 0;
+
+    }
+
+    .nav-links a {
+        font-size: 1.2em;
+        padding: 10px;
+        justify-content: center;
+    }
+    
+    .nav-links li {
+        width: 100%; /* Täysi leveys */
+        text-align: center; /* Keskittää tekstin */
+        margin: 10px 0px; /* Säädä marginaalia tarpeen mukaan */
+    }
+
+
+    .has-dropdown .submenu {
+        background-color: rgb(0, 0, 0);
+    }
+
+    .has-dropdown.active .submenu {
+        display: block;
+    }
+
+    .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.382);
+        display: none;
+        z-index: 1;
+    }
+
+    .burger-menu {
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px; /* Siirretään oikealle yläkulmaan */
+    }
+
+    .buttons{
+        gap: 40px;
+    }
+
+
+    .login-button,
+    .join-button{
+        margin-right: 0;
+    }
+
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+
+    .logo {
+        margin: 0 auto;
+        width: 90%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+    
+    .burger-menu {
+        display: block;
+    }
+    
+     
+
+    .nav-links {
+        position: fixed;
+        flex-direction: column;
+        top: 0;
+        right: -49%;
+        width: 49%;
+        height: 100%;
+        margin-top: 0;
+        padding-top: 90px;
+        background-color: #068d41a1;
+        transition: right 0.3s ease;
+        overflow-y: auto;
+        z-index: 3;
+    }
+
+
+    .nav-links.active {
+        right: 0;
+    }
+
+    .nav-links a{
+        font-size: 1.5em;
+    }
+    .nav-links li{
+        margin: 15px;
+    }
+
+    .has-dropdown .submenu {
+        background-color: rgb(0, 0, 0);
+    }
+
+    .has-dropdown.active .submenu {
+        display: block;
+    }
+
+    .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.382);
+        display: none;
+        z-index: 1;
+    }
+
+    .buttons{
+        gap:8px;
+    }
+    .login-button, 
+    .join-button{
+        margin-right: 5px;
+    }
+
+}
+
+
+
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width:1200px) {
+
+     .logo {
+        margin: 0 auto;
+        width: 95%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+
+    .burger-menu {
+        display: block;
+    }
+    
+ 
+
+
+
+    .nav-links {
+        position: fixed;
+        flex-direction: column;
+        top: 0;
+        right: -33.33%;
+        width: 33.33%;
+        height: 100%;
+        margin-top: 0;
+        padding-top: 90px;
+        background-color: #068d41a1;
+        transition: right 0.3s ease;
+        overflow-y: auto;
+        z-index: 3;
+    }
+
+    .nav-links.active {
+        right: 0;
+    }
+
+    .nav-links a{
+        font-size: 1.5em;
+    }
+    .nav-links li{
+        margin: 15px;
+    }
+
+
+    .has-dropdown .submenu {
+        background-color: rgb(0, 0, 0);
+    }
+
+    .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.382);
+        display: none;
+        z-index: 1;
+    }
+
+    .buttons{
+    width: 50vw;
+    display: flex;
+    flex-direction: row-reverse;
+    }
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) 
+@media only screen and (min-width: 1200px) {
+    .footer{
+        background-color: #07a04a;
+    }
+} */

@@ -1,0 +1,13 @@
+<?php
+require 'includes/dbconnect.php'; // Oletetaan, että tämä tiedosto sisältää tietokantayhteyden
+
+// Ota vastaan päivämäärä GET-parametrina
+$selectedDay = $_GET['day'];
+
+// Muodosta SQL-kysely, joka hakee kyseisen päivän jumppatunnit
+$query = "SELECT * FROM Jumpat WHERE DATE(start_time) = :selectedDay";
+$stmt = $conn->prepare($query);
+$stmt->execute(['selectedDay' => $selectedDay]);
+
+// Palauta tulokset JSON-muodossa
+echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
